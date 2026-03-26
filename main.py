@@ -1,3 +1,5 @@
+from curses.textpad import Textbox
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_chroma import Chroma
@@ -6,6 +8,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough,RunnableMap
 from langchain_core.output_parsers import StrOutputParser
 from langchain_huggingface import HuggingFaceEmbeddings
+import gradio as gr
 from dotenv import load_dotenv
 import os
 
@@ -64,7 +67,16 @@ def generate_response(file,question):
     except Exception as e:
         return f"Error processing the file : {e}"
 
+with gr.Blocks(title="DOC RAG",theme=gr.themes.Glass()) as demo:
+    with gr.Row():
+        with gr.Column():
+            pdf = gr.File(file_types=[".pdf"],file_count="single",label="Upload PDF")
+        with gr.Column():
+            question = gr.Textbox(label="Question",placeholder="Type your question here...")
+            submit = gr.Button("Ask")
+        answer = gr.Textbox(label="Answer")
+        submit.click(fn=generate_response,inputs=[pdf,question],outputs=[answer])
 
 if __name__ == '__main__':
-    print('PyCharm')
+    demo.launch()
 
