@@ -1,5 +1,4 @@
-from curses.textpad import Textbox
-
+from huggingface_hub import login
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_chroma import Chroma
@@ -13,6 +12,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
+login(token=os.getenv("HF_TOKEN"))
 
 def get_retriever(filename):
     loader = PyPDFLoader(filename)
