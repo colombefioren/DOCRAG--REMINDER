@@ -67,7 +67,7 @@ def generate_response(file,question):
     except Exception as e:
         return f"Error processing the file : {e}"
 
-with gr.Blocks(title="DOC RAG",theme=gr.themes.Glass()) as demo:
+with gr.Blocks(title="DOC RAG") as demo:
     with gr.Row():
         with gr.Column():
             pdf = gr.File(file_types=[".pdf"],file_count="single",label="Upload PDF")
@@ -78,5 +78,5 @@ with gr.Blocks(title="DOC RAG",theme=gr.themes.Glass()) as demo:
         submit.click(fn=generate_response,inputs=[pdf,question],outputs=[answer])
 
 if __name__ == '__main__':
-    demo.launch()
+    demo.launch(theme=gr.themes.Glass())
 
