@@ -28,7 +28,7 @@ def get_retriever(filename):
     vectorstore = Chroma.from_documents(
         documents=chunks,
         embedding= HuggingFaceEmbeddings(model_name=os.getenv("EMBEDDING_MODEL")),
-        collection_name="split document"
+        collection_name="split_document"
     )
 
     return vectorstore.as_retriever()
