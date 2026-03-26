@@ -1,8 +1,34 @@
+import dotenv
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_chroma import Chroma
+from langchain_openai import ChatOpenAI
+from langchain_huggingface import HuggingFaceEmbeddings
+from dotenv import load_dotenv
+import os
 
-def print_hi(name):
-    print(f'Hi, {name}')
+load_dotenv()
+
+def get_vectorstore(filename):
+    loader = PyPDFLoader(filename)
+    document = loader.load()
+
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=400,
+        chunk_overlap=100
+    )
+
+    chunks = text_splitter.split_documents(document)
+
+    vectorstore = Chroma.from_documents(documents=chunks,embedding= HuggingFaceEmbeddings(model_name=os.getenv("EMBEDDING_MODEL")) ,collection_name="split document")
+
+    return vectorstore.as_retriever()
+
+
+
+
 
 
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    print('PyCharm')
 
